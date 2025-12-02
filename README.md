@@ -607,8 +607,8 @@ Authenticate a user and receive an API token.
 **Request Body:**
 ```json
 {
-    "email": "user@example.com",
-    "password": "password123"
+    "email": "user1@example.com",
+    "password": "password"
 }
 ```
 
@@ -619,8 +619,8 @@ Authenticate a user and receive an API token.
     "token": "1|abcdef123456...",
     "user": {
         "id": 1,
-        "name": "John Doe",
-        "email": "user@example.com"
+        "name": "User One",
+        "email": "user1@example.com"
     }
 }
 ```
