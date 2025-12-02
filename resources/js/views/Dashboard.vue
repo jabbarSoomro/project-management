@@ -2,10 +2,13 @@
   <div>
     <Navbar />
     <header class="bg-white shadow">
-      <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+      <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
         <h1 class="text-3xl font-bold text-gray-900">
           Dashboard
         </h1>
+        <router-link :to="{ name: 'ProjectCreate' }" class="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm hover:bg-indigo-700">
+          Create Project
+        </router-link>
       </div>
     </header>
     <main>

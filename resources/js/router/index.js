@@ -20,6 +20,12 @@ const routes = [
         component: () => import('../views/ProjectDetails.vue'),
         meta: { requiresAuth: true }
     },
+    {
+        path: '/projects/create',
+        name: 'ProjectCreate',
+        component: () => import('../views/ProjectCreate.vue'),
+        meta: { requiresAuth: true }
+    },
 ];
 
 const router = createRouter({
