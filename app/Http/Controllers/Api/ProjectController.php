@@ -16,6 +16,23 @@ class ProjectController extends Controller
     ) {
     }
 
+    public function index(\Illuminate\Http\Request $request): JsonResponse
+    {
+        $projects = \App\Models\Project::where('user_id', $request->user()->id)
+            ->latest()
+            ->paginate(10);
+
+        return response()->json([
+            'data' => \App\Http\Resources\ProjectResource::collection($projects),
+            'meta' => [
+                'current_page' => $projects->currentPage(),
+                'last_page' => $projects->lastPage(),
+                'per_page' => $projects->perPage(),
+                'total' => $projects->total(),
+            ],
+        ]);
+    }
+
     public function store(CreateProjectRequest $request): JsonResponse
     {
         $this->authorize('create', \App\Models\Project::class);
