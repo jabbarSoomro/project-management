@@ -18,12 +18,10 @@ class ProjectController extends Controller
 
     public function index(\Illuminate\Http\Request $request): JsonResponse
     {
-        $projects = \App\Models\Project::where('user_id', $request->user()->id)
-            ->latest()
-            ->paginate(10);
+        $projects = $this->projectService->getUserProjects($request->user()->id);
 
         return response()->json([
-            'data' => \App\Http\Resources\ProjectResource::collection($projects),
+            'data' => ProjectResource::collection($projects),
             'meta' => [
                 'current_page' => $projects->currentPage(),
                 'last_page' => $projects->lastPage(),

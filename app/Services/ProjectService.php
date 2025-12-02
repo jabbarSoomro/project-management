@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Project;
 use App\Repositories\Contracts\ProjectRepositoryInterface;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class ProjectService
 {
@@ -31,5 +32,10 @@ class ProjectService
     public function getAllProjects(): Collection
     {
         return $this->projectRepository->getAll();
+    }
+
+    public function getUserProjects(int $userId, int $perPage = 10): LengthAwarePaginator
+    {
+        return $this->projectRepository->getPaginatedByUserId($userId, $perPage);
     }
 }
