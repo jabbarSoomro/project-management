@@ -31,6 +31,10 @@ class TaskController extends Controller
 
         $data = $request->validated();
         $data['project_id'] = $projectId;
+        
+        if (!isset($data['assigned_user_id'])) {
+            $data['assigned_user_id'] = auth()->id();
+        }
 
         $task = $this->taskService->createTask($data);
 

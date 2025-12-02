@@ -87,65 +87,66 @@
     </main>
 
     <!-- Task Creation Modal -->
-    <div v-if="showTaskModal" class="fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
-      <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" @click="closeTaskModal"></div>
+    <!-- Task Creation Modal -->
+    <div v-if="showTaskModal" class="relative z-50" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+      <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 
-        <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-          <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <div class="sm:flex sm:items-start">
-              <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
-                  Add New Task
-                </h3>
-                <div class="mt-2">
-                  <form @submit.prevent="createTask">
-                    <div class="space-y-4">
-                      <div>
-                        <label for="task-title" class="block text-sm font-medium text-gray-700">Title</label>
-                        <input type="text" id="task-title" v-model="taskForm.title" required
-                               class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md border p-2">
+      <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+          <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+              <div class="sm:flex sm:items-start">
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                  <h3 class="text-lg leading-6 font-medium text-gray-900" id="modal-title">
+                    Add New Task
+                  </h3>
+                  <div class="mt-2">
+                    <form @submit.prevent="createTask">
+                      <div class="space-y-4">
+                        <div>
+                          <label for="task-title" class="block text-sm font-medium text-gray-700">Title</label>
+                          <input type="text" id="task-title" v-model="taskForm.title" required
+                                 class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md border p-2">
+                        </div>
+                        <div>
+                          <label for="task-desc" class="block text-sm font-medium text-gray-700">Description</label>
+                          <textarea id="task-desc" v-model="taskForm.description" rows="3"
+                                    class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md border p-2"></textarea>
+                        </div>
+                        <div>
+                          <label for="task-deadline" class="block text-sm font-medium text-gray-700">Deadline</label>
+                          <input type="date" id="task-deadline" v-model="taskForm.deadline" required
+                                 class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md border p-2">
+                        </div>
+                        <div>
+                          <label for="task-status" class="block text-sm font-medium text-gray-700">Status</label>
+                          <select id="task-status" v-model="taskForm.status"
+                                  class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md border p-2">
+                            <option value="in_progress">In Progress</option>
+                            <option value="completed">Completed</option>
+                            <option value="blocked">Blocked</option>
+                            <option value="on_hold">On Hold</option>
+                          </select>
+                        </div>
                       </div>
-                      <div>
-                        <label for="task-desc" class="block text-sm font-medium text-gray-700">Description</label>
-                        <textarea id="task-desc" v-model="taskForm.description" rows="3"
-                                  class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md border p-2"></textarea>
+                      <div v-if="taskError" class="mt-2 text-red-500 text-sm">
+                        {{ taskError }}
                       </div>
-                      <div>
-                        <label for="task-deadline" class="block text-sm font-medium text-gray-700">Deadline</label>
-                        <input type="date" id="task-deadline" v-model="taskForm.deadline" required
-                               class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md border p-2">
-                      </div>
-                      <div>
-                        <label for="task-status" class="block text-sm font-medium text-gray-700">Status</label>
-                        <select id="task-status" v-model="taskForm.status"
-                                class="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md border p-2">
-                          <option value="in_progress">In Progress</option>
-                          <option value="completed">Completed</option>
-                          <option value="blocked">Blocked</option>
-                          <option value="on_hold">On Hold</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div v-if="taskError" class="mt-2 text-red-500 text-sm">
-                      {{ taskError }}
-                    </div>
-                  </form>
+                    </form>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-            <button type="button" @click="createTask" :disabled="taskLoading"
-                    class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50">
-              {{ taskLoading ? 'Saving...' : 'Save Task' }}
-            </button>
-            <button type="button" @click="closeTaskModal"
-                    class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
-              Cancel
-            </button>
+            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+              <button type="button" @click="createTask" :disabled="taskLoading"
+                      class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50">
+                {{ taskLoading ? 'Saving...' : 'Save Task' }}
+              </button>
+              <button type="button" @click="closeTaskModal"
+                      class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       </div>

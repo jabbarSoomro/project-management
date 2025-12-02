@@ -15,7 +15,7 @@ class CreateTaskRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'deadline' => ['required', 'date', 'after_or_equal:today'],
-            'assigned_user_id' => ['required', 'exists:users,id'],
+            'assigned_user_id' => ['nullable', 'exists:users,id'],
             'status' => ['sometimes', 'in:pending,in_progress,completed,blocked'],
         ];
     }

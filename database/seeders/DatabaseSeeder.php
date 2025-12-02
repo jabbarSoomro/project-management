@@ -17,18 +17,18 @@ class DatabaseSeeder extends Seeder
     {
         $specificUsers = [
             [
-                'name' => 'Admin User',
-                'email' => 'admin@example.com',
+                'name' => 'User one',
+                'email' => 'user1@example.com',
                 'password' => 'password',
             ],
             [
-                'name' => 'Manager User',
-                'email' => 'manager@example.com',
+                'name' => 'User two',
+                'email' => 'user2@example.com',
                 'password' => 'password',
             ],
             [
-                'name' => 'Member User',
-                'email' => 'member@example.com',
+                'name' => 'user3',
+                'email' => 'user3@example.com',
                 'password' => 'password',
             ],
         ];
