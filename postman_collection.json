@@ -1,0 +1,243 @@
+{
+    "info": {
+        "_postman_id": "project-management-api",
+        "name": "Project Management API",
+        "description": "API documentation for the Project Management System. This API provides endpoints for authentication, project management, and task management.",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "token",
+                "value": "{{auth_token}}",
+                "type": "string"
+            }
+        ]
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:8000/api",
+            "type": "string"
+        },
+        {
+            "key": "auth_token",
+            "value": "",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "Authentication",
+            "item": [
+                {
+                    "name": "Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.collectionVariables.set(\"auth_token\", jsonData.token);",
+                                    "}"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"email\": \"user@example.com\",\n    \"password\": \"password123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/login",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "login"
+                            ]
+                        },
+                        "description": "Authenticate a user and receive an API token.\n\n**Request Body:**\n- `email` (required, string): User's email address\n- `password` (required, string): User's password\n\n**Response (200 OK):**\n```json\n{\n    \"message\": \"Login successful\",\n    \"token\": \"1|abcdef123456...\",\n    \"user\": {\n        \"id\": 1,\n        \"name\": \"John Doe\",\n        \"email\": \"user@example.com\"\n    }\n}\n```\n\n**Response (422 Unprocessable Entity):**\n```json\n{\n    \"message\": \"The provided credentials are incorrect.\",\n    \"errors\": {\n        \"email\": [\"The provided credentials are incorrect.\"]\n    }\n}\n```"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Logout",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/logout",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "logout"
+                            ]
+                        },
+                        "description": "Logout the authenticated user and invalidate the current token.\n\n**Authentication:** Required (Bearer Token)\n\n**Response (200 OK):**\n```json\n{\n    \"message\": \"Logout successful\"\n}\n```"
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Endpoints for user authentication and session management."
+        },
+        {
+            "name": "Projects",
+            "item": [
+                {
+                    "name": "List Projects",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/projects?page=1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "projects"
+                            ],
+                            "query": [
+                                {
+                                    "key": "page",
+                                    "value": "1",
+                                    "description": "Page number for pagination"
+                                }
+                            ]
+                        },
+                        "description": "Retrieve a paginated list of projects for the authenticated user.\n\n**Authentication:** Required (Bearer Token)\n\n**Query Parameters:**\n- `page` (optional, integer): Page number for pagination (default: 1)\n\n**Response (200 OK):**\n```json\n{\n    \"data\": [\n        {\n            \"id\": 1,\n            \"title\": \"Website Redesign\",\n            \"client\": \"Acme Corp\",\n            \"start_date\": \"2025-01-01\",\n            \"end_date\": \"2025-03-31\",\n            \"status\": \"in_progress\",\n            \"user_id\": 1,\n            \"created_at\": \"2025-12-01T10:00:00.000000Z\",\n            \"updated_at\": \"2025-12-01T10:00:00.000000Z\"\n        }\n    ],\n    \"meta\": {\n        \"current_page\": 1,\n        \"last_page\": 5,\n        \"per_page\": 10,\n        \"total\": 50\n    }\n}\n```"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Create Project",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Website Redesign\",\n    \"client\": \"Acme Corp\",\n    \"start_date\": \"2025-01-01\",\n    \"end_date\": \"2025-03-31\",\n    \"status\": \"pending\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/projects",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "projects"
+                            ]
+                        },
+                        "description": "Create a new project for the authenticated user.\n\n**Authentication:** Required (Bearer Token)\n\n**Request Body:**\n- `title` (required, string, max:255): Project title\n- `client` (required, string, max:255): Client name\n- `start_date` (required, date): Project start date (must be today or later)\n- `end_date` (required, date): Project end date (must be after start_date)\n- `status` (optional, string): Project status - one of: `pending`, `in_progress`, `completed`, `on_hold`\n\n**Response (201 Created):**\n```json\n{\n    \"message\": \"Project created successfully\",\n    \"data\": {\n        \"id\": 1,\n        \"title\": \"Website Redesign\",\n        \"client\": \"Acme Corp\",\n        \"start_date\": \"2025-01-01\",\n        \"end_date\": \"2025-03-31\",\n        \"status\": \"pending\",\n        \"user_id\": 1,\n        \"created_at\": \"2025-12-02T18:50:00.000000Z\",\n        \"updated_at\": \"2025-12-02T18:50:00.000000Z\"\n    }\n}\n```\n\n**Response (422 Unprocessable Entity):**\n```json\n{\n    \"message\": \"The given data was invalid.\",\n    \"errors\": {\n        \"title\": [\"The title field is required.\"],\n        \"start_date\": [\"The start date must be a date after or equal to today.\"]\n    }\n}\n```"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Show Project",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/projects/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "projects",
+                                "1"
+                            ]
+                        },
+                        "description": "Retrieve details of a specific project including its tasks.\n\n**Authentication:** Required (Bearer Token)\n\n**URL Parameters:**\n- `id` (required, integer): Project ID\n\n**Response (200 OK):**\n```json\n{\n    \"data\": {\n        \"id\": 1,\n        \"title\": \"Website Redesign\",\n        \"client\": \"Acme Corp\",\n        \"start_date\": \"2025-01-01\",\n        \"end_date\": \"2025-03-31\",\n        \"status\": \"in_progress\",\n        \"user_id\": 1,\n        \"tasks\": [\n            {\n                \"id\": 1,\n                \"title\": \"Design Homepage\",\n                \"deadline\": \"2025-01-15\",\n                \"status\": \"in_progress\",\n                \"assigned_user_id\": 1,\n                \"project_id\": 1\n            }\n        ],\n        \"created_at\": \"2025-12-01T10:00:00.000000Z\",\n        \"updated_at\": \"2025-12-01T10:00:00.000000Z\"\n    }\n}\n```\n\n**Response (404 Not Found):**\n```json\n{\n    \"message\": \"Project not found\"\n}\n```\n\n**Response (403 Forbidden):**\n```json\n{\n    \"message\": \"This action is unauthorized.\"\n}\n```"
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Endpoints for managing projects."
+        },
+        {
+            "name": "Tasks",
+            "item": [
+                {
+                    "name": "Create Task",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "Accept",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"title\": \"Design Homepage\",\n    \"deadline\": \"2025-01-15\",\n    \"assigned_user_id\": 1,\n    \"status\": \"pending\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/projects/1/tasks",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "projects",
+                                "1",
+                                "tasks"
+                            ]
+                        },
+                        "description": "Create a new task within a specific project.\n\n**Authentication:** Required (Bearer Token)\n\n**URL Parameters:**\n- `projectId` (required, integer): Project ID to create the task in\n\n**Request Body:**\n- `title` (required, string, max:255): Task title\n- `deadline` (required, date): Task deadline (must be today or later)\n- `assigned_user_id` (optional, integer): ID of the user to assign the task to (defaults to authenticated user if not provided)\n- `status` (optional, string): Task status - one of: `pending`, `in_progress`, `completed`, `blocked`\n\n**Response (201 Created):**\n```json\n{\n    \"message\": \"Task created successfully\",\n    \"data\": {\n        \"id\": 1,\n        \"title\": \"Design Homepage\",\n        \"deadline\": \"2025-01-15\",\n        \"status\": \"pending\",\n        \"assigned_user_id\": 1,\n        \"project_id\": 1,\n        \"assigned_user\": {\n            \"id\": 1,\n            \"name\": \"John Doe\",\n            \"email\": \"user@example.com\"\n        },\n        \"created_at\": \"2025-12-02T18:50:00.000000Z\",\n        \"updated_at\": \"2025-12-02T18:50:00.000000Z\"\n    }\n}\n```\n\n**Response (404 Not Found):**\n```json\n{\n    \"message\": \"Project not found\"\n}\n```\n\n**Response (422 Unprocessable Entity):**\n```json\n{\n    \"message\": \"The given data was invalid.\",\n    \"errors\": {\n        \"title\": [\"The title field is required.\"],\n        \"deadline\": [\"The deadline must be a date after or equal to today.\"],\n        \"assigned_user_id\": [\"The selected assigned user id is invalid.\"]\n    }\n}\n```"
+                    },
+                    "response": []
+                }
+            ],
+            "description": "Endpoints for managing tasks within projects."
+        }
+    ]
+}
